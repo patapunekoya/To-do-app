@@ -96,4 +96,7 @@ packages/core/lib/src/
 ✅ Pagination "Load more".
 ✅ Node.js REST API (Express + Zod).
 ✅ Dễ mở rộng, rõ ràng theo module.
-
+```
+---
+## 🧪App Demo
+<img width="357" height="801" alt="TodoApp" src="https://github.com/user-attachments/assets/13bd2806-cd31-486d-a1d8-8528cd547218" />
