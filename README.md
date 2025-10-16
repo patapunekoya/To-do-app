@@ -30,16 +30,78 @@
 ## 🏗️ Project Structure
 
 ```plaintext
+
 todo-mini/
 ├─ apps/
-│  └─ flutter_todo/            # Flutter frontend (BLoC, UI, DI)
+│  └─ flutter_todo/                 # App Flutter (UI/Router/DI/Theme)
 ├─ packages/
-│  ├─ core/                    # Shared utilities, logger, Either, UseCase base
-│  ├─ todos_domain/            # Domain entities, value objects, repositories, usecases
-│  ├─ todos_data/              # Data layer (Hive local, repository impl)
-│  └─ todos_application/       # Application layer (BLoC, DI)
-└─ backend/
-   └─ node_todo_api/           # Node.js API (Express + TypeScript + Zod)
+│  ├─ core/                         # Cross-cutting: error, usecase base, utils
+│  │  ├─ lib/
+│  │  │  ├─ src/
+│  │  │  │  ├─ either.dart
+│  │  │  │  ├─ failure.dart
+│  │  │  │  ├─ usecase.dart        # Base UseCase<Input, Output>
+│  │  │  │  ├─ di.dart             # get_it registration helpers
+│  │  │  │  └─ logger.dart
+│  │  │  └─ core.dart
+│  ├─ todos_domain/                 # DDD: Domain layer (pure Dart)
+│  │  ├─ lib/
+│  │  │  ├─ src/
+│  │  │  │  ├─ entities/
+│  │  │  │  │  └─ todo.dart
+│  │  │  │  ├─ value_objects/
+│  │  │  │  │  └─ title_vo.dart
+│  │  │  │  ├─ repositories/
+│  │  │  │  │  └─ todos_repository.dart   # abstract interface
+│  │  │  │  └─ usecases/
+│  │  │  │     ├─ add_todo.dart
+│  │  │  │     ├─ update_todo.dart
+│  │  │  │     ├─ toggle_complete.dart
+│  │  │  │     ├─ delete_todo.dart
+│  │  │  │     └─ get_todos_paginated.dart  # phục vụ “load more”
+│  │  │  └─ todos_domain.dart
+│  ├─ todos_data/                   # DDD: Infrastructure (data)
+│  │  ├─ lib/
+│  │  │  ├─ src/
+│  │  │  │  ├─ datasources/
+│  │  │  │  │  ├─ local/
+│  │  │  │  │  │  ├─ hive_adapters.dart
+│  │  │  │  │  │  └─ todos_local_ds.dart
+│  │  │  │  │  └─ remote/
+│  │  │  │  │     └─ todos_api_ds.dart      # để sau sync Node
+│  │  │  │  ├─ models/
+│  │  │  │  │  └─ todo_model.dart
+│  │  │  │  └─ repositories/
+│  │  │  │     └─ todos_repository_impl.dart
+│  │  │  └─ todos_data.dart
+│  └─ todos_application/            # DDD: Application (BLoC, coordinators)
+│     ├─ lib/
+│     │  ├─ src/
+│     │  │  ├─ blocs/
+│     │  │  │  └─ todos/
+│     │  │  │     ├─ todos_bloc.dart
+│     │  │  │     ├─ todos_event.dart
+│     │  │  │     └─ todos_state.dart
+│     │  │  └─ mappers/             # map Entity <-> UI models nếu cần
+│     │  └─ todos_application.dart
+└─ backend/node_todo_api/
+│  ├─ src/
+│  │  ├─ app.ts
+│  │  ├─ server.ts
+│  │  ├─ routes/
+│  │  │  └─ todos.routes.ts
+│  │  ├─ controllers/
+│  │  │  └─ todos.controller.ts
+│  │  ├─ services/
+│  │  │  └─ todos.service.ts
+│  │  ├─ repositories/
+│  │  │  └─ todos.repo.ts          # có thể dùng SQLite/Prisma/Mongo tùy gu
+│  │  └─ schemas/
+│  │     └─ todo.schema.ts         # validate với zod
+│  ├─ package.json
+│  └─ tsconfig.json
+
+
 ⚙️ Setup & Run
 🖥️ Backend
 bash
