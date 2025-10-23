@@ -40,6 +40,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       '-' +
       Random().nextInt(1 << 32).toString();
 
+// Xử lý: tải trang đầu tiên của danh sách Todo.
+// Kết quả:
+
+// Nếu thành công → emit state có items, offset, hasMore=true/false.
+
+// Nếu lỗi → emit state status=failure, có thông báo lỗi.
   Future<void> _onInitialLoad(
     TodosInitialLoadRequested event,
     Emitter<TodosState> emit,
@@ -68,6 +74,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     );
   }
 
+// Xử lý: tải trang kế tiếp (phân trang / “xem thêm”).
+// Kết quả:
+
+// Thành công → nối thêm dữ liệu vào state.items.
+
+// Thất bại → báo lỗi, không đổi danh sách hiện có.
   Future<void> _onLoadMore(
     TodosLoadMoreRequested event,
     Emitter<TodosState> emit,
@@ -98,6 +110,16 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     );
   }
 
+// Xử lý: thêm một Todo mới.
+
+// Validate TitleVO.create() trước khi tạo.
+
+// Sinh id, tạo Todo, gọi AddTodo.
+// Kết quả:
+
+// Thành công → chèn Todo mới lên đầu danh sách, offset +1.
+
+// Thất bại → báo lỗi validation hoặc lỗi thêm.
   Future<void> _onAdd(
     TodosAddRequested event,
     Emitter<TodosState> emit,
@@ -137,6 +159,14 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     );
   }
 
+// Xử lý: sửa tiêu đề Todo.
+
+// Validate title mới, tìm Todo theo id, cập nhật bằng copyWith().
+// Kết quả:
+
+// Thành công → cập nhật lại danh sách (thay thế phần tử).
+
+// Thất bại → emit lỗi validation hoặc lỗi cập nhật.
   Future<void> _onUpdate(
     TodosUpdateRequested event,
     Emitter<TodosState> emit,
@@ -167,6 +197,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     );
   }
 
+// Xử lý: đổi trạng thái hoàn thành (isCompleted).
+// Kết quả:
+
+// Thành công → đảo trạng thái trong danh sách (true ↔ false).
+
+// Thất bại → không đổi, báo lỗi.
   Future<void> _onToggle(
     TodosToggleRequested event,
     Emitter<TodosState> emit,
@@ -189,6 +225,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     );
   }
 
+// Xử lý: xóa Todo theo id.
+// Kết quả:
+
+// Thành công → loại bỏ Todo khỏi danh sách, offset -1.
+
+// Thất bại → emit lỗi.
   Future<void> _onDelete(
     TodosDeleteRequested event,
     Emitter<TodosState> emit,
@@ -211,6 +253,12 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
     );
   }
 
+// Xử lý: tải lại toàn bộ danh sách từ đầu.
+// Kết quả:
+
+// Thành công → danh sách mới, offset và hasMore reset.
+
+// Thất bại → báo lỗi, không đổi dữ liệu cũ.
   Future<void> _onRefresh(
     TodosRefreshRequested event,
     Emitter<TodosState> emit,
